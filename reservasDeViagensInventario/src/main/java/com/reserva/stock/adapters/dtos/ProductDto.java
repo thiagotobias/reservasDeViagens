@@ -1,8 +1,8 @@
-package com.reserva.estoque.adapters;
+package com.reserva.stock.adapters.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record ProdutoDto(String id, String descricao,
+public record ProductDto(String id, String descricao,
                          @JsonProperty("quantidade_disponivel") Integer quantidadeDisponivel) {
 
 }

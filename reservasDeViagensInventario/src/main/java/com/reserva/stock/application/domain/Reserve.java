@@ -1,4 +1,4 @@
-package com.reserva.estoque.application.domain;
+package com.reserva.stock.application.domain;
 
 import lombok.Data;
 
@@ -6,13 +6,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class Reserva {
+public class Reserve {
 
     private String vendaId;
-    private List<Produto> produtos;
+    private List<Product> produtos;
     private LocalDate dataReserva;
 
-    public Reserva(String vendaId, List<Produto> produtos) {
+    public Reserve(String vendaId, List<Product> produtos) {
         this.vendaId = vendaId;
         this.produtos = produtos;
         this.dataReserva = LocalDate.now();
