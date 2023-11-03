@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     private String id;
-    private String descricao;
-    private Integer quantidadeDispinvel;
+    private String description;
+    private Integer availableQuantity;
 
-    public Product(String id, String descricao, Integer quantidadeDispinvel) {
+    public Product(String id, String description, Integer availableQuantity) {
         this.id = id;
-        this.descricao = descricao;
-        this.quantidadeDispinvel = quantidadeDispinvel;
+        this.description = description;
+        this.availableQuantity = availableQuantity;
     }
 }
