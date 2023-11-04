@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface ProductRepository extends JpaRepository<ProductEntity, String> {
 
     @Modifying
-    @Query(value = "update PRODUC set QUANTIDADE_DISPONIVEL = QUANTIDADE_DISPONIVEL - :availableQuantity where id = :productId", nativeQuery = true)
-    void decreaseStock(@Param("productId") String productId, @Param("quantidadeReservada") Integer availableQuantity);
+    @Query(value = "update PRODUTO set QUANTIDADE_DISPONIVEL = QUANTIDADE_DISPONIVEL - :quantidadeReservada where id = :productId", nativeQuery = true)
+    void decreaseStock(@Param("productId") String productId, @Param("quantidadeReservada") Integer quantidadeReservada);
 }
 
 

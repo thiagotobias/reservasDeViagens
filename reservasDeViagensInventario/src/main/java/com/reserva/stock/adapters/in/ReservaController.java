@@ -33,7 +33,7 @@ public class ReservaController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<?> reserve(@RequestBody ReserveDto reservaDto) {
         var createdReserve = reserveService.reserve(reservaDto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdReserve.saleId())
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdReserve.getSaleId())
                 .toUri();
         return ResponseEntity.created(uri).build();
     }

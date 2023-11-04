@@ -14,6 +14,6 @@ public class ProductReserveDto implements Serializable {
 
     private String id;
     private String description;
-    private String quantity;
+    private Integer quantity;
 
 }

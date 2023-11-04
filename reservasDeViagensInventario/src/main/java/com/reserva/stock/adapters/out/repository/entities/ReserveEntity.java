@@ -3,6 +3,8 @@ package com.reserva.stock.adapters.out.repository.entities;
 
 import com.reserva.stock.application.domain.Reserve;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 @Table(name = "reserva")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ReserveEntity {
 
     @Id

@@ -10,6 +10,8 @@ import java.io.Serializable;
 @Table(name = "produto_reserva")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductReserveEntity {
 
 
@@ -33,6 +35,7 @@ public class ProductReserveEntity {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
+    @Builder
     public static class ProdutoReservaID implements Serializable {
 
         @Column(name = "produto_id")
