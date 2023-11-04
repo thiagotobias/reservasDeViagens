@@ -5,11 +5,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "produto")
 @Data
 @NoArgsConstructor
-public class ProductEntity {
+public class ProductEntity implements Serializable {
+
+    private static final long serialVersionUID = 7156526077883281623L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

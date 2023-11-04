@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReserveService {
 
-    List<ProductDto> getAllProducts ();
+    List<ProductDto> getAllProducts () throws InterruptedException;
 
     void reserveProduct(ProductDto productDto);
 
