@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produto")
@@ -25,6 +26,8 @@ public class ProductEntity implements Serializable {
     @Column(name = "quantidade_disponivel")
     private Integer availableQuantity;
 
+    @Column(name = "valor")
+    private BigDecimal value;
     public ProductEntity(Product product) {
         this.id = product.getId();
         this.availableQuantity = product.getAvailableQuantity();

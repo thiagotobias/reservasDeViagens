@@ -2,16 +2,16 @@ package com.reserva.stock.adapters.in;
 
 
 import com.reserva.stock.adapters.dtos.ProductDto;
+import com.reserva.stock.adapters.dtos.ReserveDto;
 import com.reserva.stock.service.ReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,7 +25,18 @@ public class ReservaController {
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> getAll() throws InterruptedException {
-        List<ProductDto>producs=this.reserveService.getAllProducts();
+        List<ProductDto> producs = this.reserveService.getAllProducts();
         return ResponseEntity.ok(producs);
     }
+
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<?> reserve(@RequestBody ReserveDto reservaDto) {
+        var createdReserve = reserveService.reserve(reservaDto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdReserve.saleId())
+                .toUri();
+        return ResponseEntity.created(uri).build();
+    }
+
+
 }

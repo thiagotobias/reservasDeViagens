@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 @Data
@@ -15,5 +16,6 @@ public class ProductDto implements Serializable {
     private String id;
     private String description;
     private Integer availableQuantity;
+    private BigDecimal value;
 }
 
