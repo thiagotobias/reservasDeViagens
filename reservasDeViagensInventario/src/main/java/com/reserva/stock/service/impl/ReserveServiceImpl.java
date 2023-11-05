@@ -3,6 +3,7 @@ package com.reserva.stock.service.impl;
 import com.reserva.stock.adapters.dtos.ProductDto;
 import com.reserva.stock.adapters.dtos.ProductReserveDto;
 import com.reserva.stock.adapters.dtos.ReserveDto;
+import com.reserva.stock.adapters.event.RabbitMQPaymentProducer;
 import com.reserva.stock.adapters.out.repository.ProductRepository;
 import com.reserva.stock.adapters.out.repository.ProductReserveRepository;
 import com.reserva.stock.adapters.out.repository.ReserveRepository;
@@ -30,6 +31,9 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Autowired
     private ReserveRepository reserveRepository;
+
+    @Autowired
+    private RabbitMQPaymentProducer rabbitMQPaymentProducer;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -66,7 +70,7 @@ public class ReserveServiceImpl implements ReserveService {
                 //subtrai quantidade disponvel
                 productRepository.decreaseStock(product.getId(), productDto.getQuantity());
             }
-
+            rabbitMQPaymentProducer.sendMessage(productDto.toString());
         }
         return reserveDto;
     }
