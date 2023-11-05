@@ -18,10 +18,8 @@
 	
 	<modules>
         <module>reservasDeViagensServer</module>
-        <module>reservasDeViagensUsuarios</module>
 		<module>reservasDeViagensReservas</module>
-		<module>reservasDeViagensPesquisa</module>
-		<module>reservasDeViagensPagamento</module>
+		<module>reservasDeViagensFinanceiro</module>
 		<module>reservasDeViagensNotificacao</module>
 		<module>reservasDeViagensInventario</module>
     </modules>
@@ -42,32 +40,22 @@
             </dependency>
             <dependency>
                <groupId>br.com</groupId>
-                <artifactId>reservasDeViagensUsuarios</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-               <groupId>br.com</groupId>
                 <artifactId>reservasDeViagensReservas</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                <groupId>br.com</groupId>
-                <artifactId>reservasDeViagensPesquisa</artifactId>
+                <artifactId>reservasDeViagensInventario</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                <groupId>br.com</groupId>
-                <artifactId>reservasDeViagensPagamento</artifactId>
+                <artifactId>reservasDeViagensFinanceiro</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                <groupId>br.com</groupId>
                 <artifactId>reservasDeViagensNotificacao</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-               <groupId>br.com</groupId>
-                <artifactId>reservasDeViagensInventario</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
