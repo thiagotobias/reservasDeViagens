@@ -28,3 +28,5 @@ replay_pid*
 /*/.classpath
 */bin/*
 */target/*
+.classpath
+.project
