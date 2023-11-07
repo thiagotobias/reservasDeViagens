@@ -13,7 +13,6 @@ public class ProductReserveDto implements Serializable {
     private static final long serialVersionUID = 7156576077283281623L;
 
     private String id;
-    private String description;
     private Integer quantity;
 
 }

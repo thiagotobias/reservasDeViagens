@@ -25,7 +25,7 @@ public class ReserveEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String vendaId;
+    private Long vendaId;
 
     private LocalDate dataReserva;
 

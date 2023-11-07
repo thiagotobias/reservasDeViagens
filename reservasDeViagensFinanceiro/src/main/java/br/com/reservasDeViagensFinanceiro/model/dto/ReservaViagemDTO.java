@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReservaViagemDTO {
+	
 	    private String idReserva;
 	    private Double totalReserva;
 	    private String statusPagamento;

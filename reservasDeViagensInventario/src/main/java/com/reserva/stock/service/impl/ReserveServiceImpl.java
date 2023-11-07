@@ -1,5 +1,12 @@
 package com.reserva.stock.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.gson.Gson;
+import com.reserva.stock.adapters.dtos.PaymentsDto;
 import com.reserva.stock.adapters.dtos.ProductDto;
 import com.reserva.stock.adapters.dtos.ProductReserveDto;
 import com.reserva.stock.adapters.dtos.ReserveDto;
@@ -18,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -52,10 +61,10 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     @Transactional
-    public ReserveDto reserve(ReserveDto reserveDto) {
+    public ReserveDto reserve(ReserveDto reserveDto) throws JsonProcessingException {
         //save reserve
         ReserveEntity reserveEntity = this.saveReserve(reserveDto);
-
+        BigDecimal total = new BigDecimal(0) ;
 
         for (ProductReserveDto productDto : reserveDto.getProducts()) {
             //findbyProduct
@@ -69,16 +78,30 @@ public class ReserveServiceImpl implements ReserveService {
                 this.saveProductReserveEntity(productDto, reserveEntity);
                 //subtrai quantidade disponvel
                 productRepository.decreaseStock(product.getId(), productDto.getQuantity());
+                total=  total.add(product.getValue());
             }
-            rabbitMQPaymentProducer.sendMessage(productDto.toString());
+
         }
+
+        sendToPayments(total,reserveDto.getReserveId());
         return reserveDto;
+    }
+
+    private void sendToPayments(BigDecimal total, Long saleId) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        PaymentsDto paymentsDTO = new PaymentsDto();
+        paymentsDTO.setTotalReserva(total);
+        paymentsDTO.setIdReserva(saleId);
+        String json = mapper.writeValueAsString(paymentsDTO);
+        rabbitMQPaymentProducer.sendMessage(json);
     }
 
     private ReserveEntity saveReserve(ReserveDto reserveDto) {
         ReserveEntity reserveEntity = new ReserveEntity();
-        reserveEntity.setDataReserva(reserveDto.getDateReserve());
-        reserveEntity.setVendaId(reserveDto.getSaleId());
+        reserveEntity.setDataReserva(LocalDate.parse(reserveDto.getDateReserve()));
+        reserveEntity.setVendaId(reserveDto.getReserveId());
         return reserveRepository.saveAndFlush(reserveEntity);
     }
 

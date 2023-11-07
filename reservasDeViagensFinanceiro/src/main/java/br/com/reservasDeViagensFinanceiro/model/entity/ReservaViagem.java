@@ -17,6 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReservaViagem {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String idReserva;
