@@ -15,4 +15,6 @@ public interface FinanceiroService {
 
 	List<TransacaoFinanceiraDTO> consultarTransacao();
 
+	void processarEstorno(ReservaViagemDTO reserva);
+
 }

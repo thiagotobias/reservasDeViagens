@@ -54,5 +54,11 @@ public class FinanceiroController {
         financeiroService.processarPagamento(reserva);
         return ResponseEntity.ok("Pagamento processado com sucesso");
     }
+    
+    @PostMapping("/processarEstorno")
+    public ResponseEntity<String> processarEstorno(@RequestBody ReservaViagemDTO reserva) {
+        financeiroService.processarEstorno(reserva);
+        return ResponseEntity.ok("Pagamento processado com sucesso");
+    }
 }
 
