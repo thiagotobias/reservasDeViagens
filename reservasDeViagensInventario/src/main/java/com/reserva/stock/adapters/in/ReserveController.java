@@ -6,7 +6,6 @@ import com.reserva.stock.adapters.dtos.ProductDto;
 import com.reserva.stock.adapters.dtos.ReserveDto;
 import com.reserva.stock.service.ReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reservas")
-public class ReservaController {
+public class ReserveController {
 
     @Autowired
     private ReserveService reserveService;
