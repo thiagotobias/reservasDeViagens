@@ -15,9 +15,9 @@ import java.util.List;
 public class ReserveDto {
 
     @JsonProperty("venda_id")
-    private String saleId;
+    private Long reserveId;
     private List<ProductReserveDto> products;
     @JsonProperty("data_reserva")
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate dateReserve;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private String dateReserve;
 }
