@@ -133,6 +133,6 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 	//public void 
 	 public void sendToPayments() throws JsonProcessingException {
 	       
-		 mqProducer.sendMessage("ola");
+		 mqProducer.sendMessage("1");
 	    }
 }

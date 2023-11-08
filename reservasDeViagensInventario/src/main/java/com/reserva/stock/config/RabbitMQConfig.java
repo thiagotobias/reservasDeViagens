@@ -14,23 +14,41 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.name}")
     private String queue;
 
+    @Value("${rabbitmq.queue.nameReserva}")
+    private String queueReserva;
+
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
+
+    @Value("${rabbitmq.routing.keyReserva}")
+    private String routingKeyReserva;
+
     @Bean
     Queue createQueue() {
         return new Queue(queue);
     }
+
+    @Bean
+    Queue createQueueReserva() {
+        return new Queue(queueReserva);
+    }
+
     @Bean
     TopicExchange exchange() {
         return new TopicExchange(exchange);
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingKey);
+    Binding binding() {
+        return BindingBuilder.bind(createQueue()).to(exchange()).with(routingKey);
+    }
+
+    @Bean
+    Binding bindingReserva() {
+        return BindingBuilder.bind(createQueueReserva()).to(exchange()).with(routingKeyReserva);
     }
 
     @Bean
