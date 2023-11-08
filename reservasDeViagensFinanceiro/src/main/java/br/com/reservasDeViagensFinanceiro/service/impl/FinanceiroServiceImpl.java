@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import br.com.reservasDeViagensFinanceiro.enuns.StatusPagamento;
 import br.com.reservasDeViagensFinanceiro.enuns.TipoTransacao;
 import br.com.reservasDeViagensFinanceiro.exception.ReservaViagemException;
@@ -89,6 +87,8 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 			// Atualize o status da reserva de viagem
 			reservaFind.setStatusPagamento(StatusPagamento.PAGO);
 			reservaRepository.save(reservaViagemEntity);
+			
+			mqProducer.sendMessage(reservaFind.getIdReserva());
 
 		}
 	}
@@ -129,10 +129,5 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 		}
 		
 	}
-	
-	//public void 
-	 public void sendToPayments() throws JsonProcessingException {
-	       
-		 mqProducer.sendMessage("ola");
-	    }
+
 }
