@@ -42,9 +42,9 @@ public class ReserveController {
 
     @PostMapping(value = "/rollback")
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity.BodyBuilder reserve(@RequestBody RollbackPayments rollbackPayments) throws JsonProcessingException {
+    public ResponseEntity reserve(@RequestBody RollbackPayments rollbackPayments) throws JsonProcessingException {
         reserveService.rollback(rollbackPayments);
-        return  ResponseEntity.ok();
+        return ResponseEntity.ok().build();
     }
 
     //post enviar pagamentos

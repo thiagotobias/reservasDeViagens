@@ -11,6 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 public class RollbackPayments {
 
-    @JsonProperty("idReserva")
+    @JsonProperty("id")
     private Long idReserve;
 }
