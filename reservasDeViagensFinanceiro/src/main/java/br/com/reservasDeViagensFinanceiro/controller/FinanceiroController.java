@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import br.com.reservasDeViagensFinanceiro.model.dto.ReservaViagemDTO;
 import br.com.reservasDeViagensFinanceiro.model.dto.TransacaoFinanceiraDTO;
 import br.com.reservasDeViagensFinanceiro.service.FinanceiroService;
@@ -60,4 +62,11 @@ public class FinanceiroController {
         financeiroService.processarEstorno(reserva);
         return ResponseEntity.ok("Pagamento processado com sucesso");
     }
+    
+    @GetMapping("/ola")
+    public ResponseEntity<String> ola() throws JsonProcessingException {
+    	financeiroService.sendToPayments();
+    	 return ResponseEntity.ok("OK");
+    }
+    
 }

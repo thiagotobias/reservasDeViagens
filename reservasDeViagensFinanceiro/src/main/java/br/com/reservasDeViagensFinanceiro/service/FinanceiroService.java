@@ -2,6 +2,8 @@ package br.com.reservasDeViagensFinanceiro.service;
 
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import br.com.reservasDeViagensFinanceiro.model.dto.ReservaViagemDTO;
 import br.com.reservasDeViagensFinanceiro.model.dto.TransacaoFinanceiraDTO;
 
@@ -12,5 +14,6 @@ public interface FinanceiroService {
 	void processarPagamento(ReservaViagemDTO reserva);
 	List<TransacaoFinanceiraDTO> consultarTransacao();
 	void processarEstorno(ReservaViagemDTO reserva);
+	void sendToPayments() throws JsonProcessingException;
 
 }

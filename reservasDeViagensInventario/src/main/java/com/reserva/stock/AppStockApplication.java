@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 
 @EnableRabbit
 @EnableCaching
-
 @SpringBootApplication
 public class AppStockApplication {
 

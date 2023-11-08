@@ -2,6 +2,7 @@ package br.com.reservasDeViagensFinanceiro.model.entity;
 
 import java.util.List;
 
+import br.com.reservasDeViagensFinanceiro.enuns.StatusPagamento;
 import br.com.reservasDeViagensFinanceiro.enuns.TipoPagamento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,7 +26,7 @@ public class ReservaViagem {
     private Double totalReserva;
 
     @Enumerated(EnumType.STRING)
-    private String statusPagamento;
+    private StatusPagamento statusPagamento;
     
     @Enumerated(EnumType.STRING)
     private TipoPagamento tipoPagamento;

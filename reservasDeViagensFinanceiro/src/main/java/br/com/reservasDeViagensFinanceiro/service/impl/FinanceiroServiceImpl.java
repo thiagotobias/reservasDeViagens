@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import br.com.reservasDeViagensFinanceiro.enuns.StatusPagamento;
 import br.com.reservasDeViagensFinanceiro.enuns.TipoTransacao;
 import br.com.reservasDeViagensFinanceiro.exception.ReservaViagemException;
 import br.com.reservasDeViagensFinanceiro.exception.TransacaoFinanceiraException;
@@ -16,6 +19,7 @@ import br.com.reservasDeViagensFinanceiro.model.entity.ReservaViagem;
 import br.com.reservasDeViagensFinanceiro.model.entity.TransacaoFinanceira;
 import br.com.reservasDeViagensFinanceiro.model.parse.ReservaViagemParser;
 import br.com.reservasDeViagensFinanceiro.model.parse.TransacaoFinanceiraParser;
+import br.com.reservasDeViagensFinanceiro.rabbitmq.producer.RabbitMQProducer;
 import br.com.reservasDeViagensFinanceiro.repository.ReservaViagemRepository;
 import br.com.reservasDeViagensFinanceiro.repository.TransacaoFinanceiraRepository;
 import br.com.reservasDeViagensFinanceiro.service.FinanceiroService;
@@ -28,6 +32,9 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 	
 	@Autowired
 	private ReservaViagemRepository reservaRepository;
+	
+	@Autowired
+	private RabbitMQProducer mqProducer;
 
 	@Override
 	public ReservaViagemDTO processarReserva(ReservaViagemDTO reserva) {
@@ -80,7 +87,7 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 			transacaoRepository.save(transacao);
 
 			// Atualize o status da reserva de viagem
-			reservaFind.setStatusPagamento("PAGO");
+			reservaFind.setStatusPagamento(StatusPagamento.PAGO);
 			reservaRepository.save(reservaViagemEntity);
 
 		}
@@ -102,7 +109,7 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 			throw new ReservaViagemException("Valor do pagamento não bate como valor da Reserva!");
 		}
 		
-		if (reservaFind.getStatusPagamento().equals("PAGO")) {
+		if (reservaFind.getStatusPagamento().equals(StatusPagamento.PAGO)) {
 			ReservaViagem reservaViagemEntity = ReservaViagemParser.toReservaViagemEntity(reservaFind);
 			// Crie uma nova transação financeira
 			TransacaoFinanceira transacao = new TransacaoFinanceira();
@@ -116,10 +123,16 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 			transacaoRepository.save(transacao);
 
 			// Atualize o status da reserva de viagem
-			reservaFind.setStatusPagamento("PAGO");
+			reservaFind.setStatusPagamento(StatusPagamento.PAGO);
 			reservaRepository.save(reservaViagemEntity);
 
 		}
 		
 	}
+	
+	//public void 
+	 public void sendToPayments() throws JsonProcessingException {
+	       
+		 mqProducer.sendMessage("ola");
+	    }
 }
