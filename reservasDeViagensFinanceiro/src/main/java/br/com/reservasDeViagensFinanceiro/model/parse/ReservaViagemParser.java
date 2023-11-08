@@ -18,7 +18,11 @@ public class ReservaViagemParser {
 	
 	public static ReservaViagemDTO toReservaViagemDTO(ReservaViagem reservaViagemEntity) {
 		
-		ReservaViagemDTO reservaViagem = new ReservaViagemDTO(); 
+		ReservaViagemDTO reservaViagem = new ReservaViagemDTO();
+		reservaViagem.setIdReserva(reservaViagemEntity.getIdReserva());
+		reservaViagem.setStatusPagamento(reservaViagemEntity.getStatusPagamento());
+		reservaViagem.setTipoPagamento(reservaViagemEntity.getTipoPagamento());
+		reservaViagem.setTotalReserva(reservaViagemEntity.getTotalReserva());
 
 		return reservaViagem;
 	}
