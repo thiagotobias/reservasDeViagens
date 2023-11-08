@@ -80,7 +80,7 @@ public class ReserveServiceImpl implements ReserveService {
                 total = total.add(product.getValue());
             }
         }
-        sendToPayments(total, reserveDto.getReserveId());
+        sendToPayments(total, reserveEntity.getId());
         return reserveDto;
     }
 
@@ -97,7 +97,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public void updateStatusPayments(Long reserveId) {
-        ReserveEntity reserve = findByReserve(reserveId);
+        ReserveEntity reserve = findByReserveQueeuPayments(reserveId);
         for (ProductReserveEntity productReserveEntity : reserve.getProducts()) {
             productReserveEntity.setStatus(StatusEnum.RESERVADO);
         }
@@ -137,6 +137,16 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     public ReserveEntity findByReserve(Long reserveId) {
+        Optional<ReserveEntity> reserve = reserveRepository.findById(reserveId);
+        if (reserve.isEmpty()) {
+            throw new ProductReserveException("Não existe essa reserva para realizar o rollback");
+        } else {
+            return reserve.get();
+        }
+    }
+
+
+    public ReserveEntity findByReserveQueeuPayments(Long reserveId) {
         Optional<ReserveEntity> reserve = reserveRepository.findById(reserveId);
         if (reserve.isEmpty()) {
             throw new ProductReserveException("Não existe essa reserva para realizar o rollback");

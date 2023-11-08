@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class ReservaViagemDTO {
 	
-	    private String idReserva;
+	    private Long idReserva;
 	    private Double totalReserva;
 	    private StatusPagamento statusPagamento;
 	    private TipoPagamento tipoPagamento;

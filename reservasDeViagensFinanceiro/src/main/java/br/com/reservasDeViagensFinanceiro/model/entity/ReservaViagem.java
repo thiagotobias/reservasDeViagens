@@ -20,8 +20,8 @@ import lombok.Setter;
 public class ReservaViagem {
 	
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String idReserva;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idReserva;
 
     private Double totalReserva;
 

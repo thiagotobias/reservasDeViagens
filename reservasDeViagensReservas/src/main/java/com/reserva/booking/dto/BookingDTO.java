@@ -14,7 +14,7 @@ import java.util.List;
 public class BookingDTO {
 
     private String bookingId;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate bookingDate;
     private List<ProductBookingDTO> products;
 

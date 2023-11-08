@@ -20,6 +20,9 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.nameReserva}")
     private String queueReserva;
 
+    @Value("${rabbitmq.queue.estorno}")
+    private String queueEstorno;
+
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
@@ -28,6 +31,9 @@ public class RabbitMQConfig {
     
     @Value("${rabbitmq.routing.keyReserva}")
     private String routingKeyReserva;
+
+    @Value("${rabbitmq.routing.keyEstorno}")
+    private String routingKeyEstorno;
     
     @Bean
     Queue createQueue() {
@@ -38,11 +44,12 @@ public class RabbitMQConfig {
     Queue createQueueReserva() {
         return new Queue(queueReserva);
     }
-    
+
     @Bean
-    TopicExchange exchange() {
-        return new TopicExchange(exchange);
+    Queue createQueueEstorno() {
+        return new Queue(queueEstorno);
     }
+
 
     @Bean
     Binding binding() {
@@ -53,7 +60,14 @@ public class RabbitMQConfig {
     Binding bindingReserva() {
         return BindingBuilder.bind(createQueueReserva()).to(exchange()).with(routingKeyReserva);
     }
-
+    @Bean
+    Binding bindingEstorno() {
+        return BindingBuilder.bind(createQueueEstorno()).to(exchange()).with(routingKeyEstorno);
+    }
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange(exchange);
+    }
     @Bean
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();

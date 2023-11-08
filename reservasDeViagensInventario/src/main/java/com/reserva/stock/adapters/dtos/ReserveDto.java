@@ -14,10 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class ReserveDto {
 
-    @JsonProperty("venda_id")
+    @JsonProperty("bookingId")
     private Long reserveId;
     private List<ProductReserveDto> products;
-    @JsonProperty("data_reserva")
+    @JsonProperty("bookingDate")
     @JsonFormat(pattern="yyyy-MM-dd")
     private String dateReserve;
 }

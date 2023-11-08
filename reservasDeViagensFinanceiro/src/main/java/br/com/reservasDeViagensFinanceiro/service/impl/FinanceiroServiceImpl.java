@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.reservasDeViagensFinanceiro.rabbitmq.producer.RabbitMQProducerEstorno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,9 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 
 	@Autowired
 	private RabbitMQProducer mqProducer;
+
+	@Autowired
+	private RabbitMQProducerEstorno mqProducerEstorno;
 
 	@Override
 	public ReservaViagemDTO processarReserva(ReservaViagemDTO reserva) {
@@ -91,7 +95,7 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 		reservaViagemEntity.setStatusPagamento(StatusPagamento.PAGO);
 		reservaViagemEntity = reservaRepository.save(reservaViagemEntity);
 
-		mqProducer.sendMessage(reservaViagemEntity.getIdReserva());
+		mqProducer.sendMessage(String.valueOf(reservaViagemEntity.getIdReserva()));
 
 	}
 
@@ -123,6 +127,7 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 			// Atualize o status da reserva de viagem
 			reservaViagemEntity.setStatusPagamento(StatusPagamento.ESTORNO);
 			reservaRepository.save(reservaViagemEntity);
+			mqProducerEstorno.sendMessage(String.valueOf(reservaViagemEntity.getIdReserva()));
 
 		}
 
