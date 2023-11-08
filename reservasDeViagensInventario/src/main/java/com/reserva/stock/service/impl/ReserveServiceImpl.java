@@ -87,18 +87,22 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     @Transactional
     public void rollback(RollbackPayments rollbackPayments) {
-
-        Optional<ReserveEntity> productsReserve = reserveRepository.findById(rollbackPayments.getIdReserve());
-        if (productsReserve.isEmpty()) {
-            throw new ProductReserveException("Não existe essa reserva para realizar o rollback");
-        } else {
-            for (ProductReserveEntity productReserveEntity : productsReserve.get().getProducts()) {
-                productReserveEntity.setStatus(StatusEnum.DISPONIVEL);
-                productRepository.incrementStock(productReserveEntity.getProductId(), productReserveEntity.getAvailableQuantity());
-            }
-
-          //  productReserveRepository.saveAllAndFlush(productsReserve);
+        ReserveEntity reserve = findByReserve(rollbackPayments.getIdReserve());
+        for (ProductReserveEntity productReserveEntity : reserve.getProducts()) {
+            productReserveEntity.setStatus(StatusEnum.RESERVA_CANCELADA);
+            productRepository.incrementStock(productReserveEntity.getProductId(), productReserveEntity.getAvailableQuantity());
         }
+        productReserveRepository.saveAllAndFlush(reserve.getProducts());
+    }
+
+    @Override
+    public void updateStatusPayments(Long reserveId) {
+        ReserveEntity reserve = findByReserve(reserveId);
+        for (ProductReserveEntity productReserveEntity : reserve.getProducts()) {
+            productReserveEntity.setStatus(StatusEnum.RESERVADO);
+        }
+        productReserveRepository.saveAllAndFlush(reserve.getProducts());
+
     }
 
     private void sendToPayments(BigDecimal total, Long saleId) throws JsonProcessingException {
@@ -130,6 +134,15 @@ public class ReserveServiceImpl implements ReserveService {
 
     public ProductEntity findByProduct(String id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductException("Não foi possivel buscar o produto com id " + id));
+    }
+
+    public ReserveEntity findByReserve(Long reserveId) {
+        Optional<ReserveEntity> reserve = reserveRepository.findById(reserveId);
+        if (reserve.isEmpty()) {
+            throw new ProductReserveException("Não existe essa reserva para realizar o rollback");
+        } else {
+            return reserve.get();
+        }
     }
 
 

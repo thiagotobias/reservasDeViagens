@@ -12,4 +12,5 @@ public interface ReserveService {
     List<ProductDto> getAllProducts () throws InterruptedException;
     ReserveDto reserve(ReserveDto reserveDto) throws JsonProcessingException;
     void rollback(RollbackPayments rollbackPayments);
+    void updateStatusPayments(Long aLong);
 }
