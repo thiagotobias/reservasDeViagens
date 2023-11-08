@@ -130,4 +130,9 @@ public class FinanceiroServiceImpl implements FinanceiroService {
 		
 	}
 
+	//public void 
+	 public void sendToPayments() {
+	       
+		 mqProducer.sendMessage("1");
+	    }
 }

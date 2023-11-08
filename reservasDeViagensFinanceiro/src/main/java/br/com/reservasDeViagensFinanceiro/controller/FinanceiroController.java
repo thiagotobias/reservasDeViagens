@@ -63,4 +63,10 @@ public class FinanceiroController {
         return ResponseEntity.ok("Pagamento processado com sucesso");
     }
     
+    @GetMapping("/ola")
+    public ResponseEntity<String> ola(){
+    	financeiroService.sendToPayments();
+    	return ResponseEntity.ok("Pagamento processado com sucesso");
+    }
+    
 }
