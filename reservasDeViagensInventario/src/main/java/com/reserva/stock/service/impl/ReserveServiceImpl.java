@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
-import com.reserva.stock.adapters.dtos.PaymentsDto;
-import com.reserva.stock.adapters.dtos.ProductDto;
-import com.reserva.stock.adapters.dtos.ProductReserveDto;
-import com.reserva.stock.adapters.dtos.ReserveDto;
+import com.reserva.stock.adapters.dtos.*;
 import com.reserva.stock.adapters.event.RabbitMQPaymentProducer;
 import com.reserva.stock.adapters.out.repository.ProductRepository;
 import com.reserva.stock.adapters.out.repository.ProductReserveRepository;
@@ -17,7 +14,9 @@ import com.reserva.stock.adapters.out.repository.ReserveRepository;
 import com.reserva.stock.adapters.out.repository.entities.ProductEntity;
 import com.reserva.stock.adapters.out.repository.entities.ProductReserveEntity;
 import com.reserva.stock.adapters.out.repository.entities.ReserveEntity;
+import com.reserva.stock.enums.StatusEnum;
 import com.reserva.stock.exception.ProductException;
+import com.reserva.stock.exception.ProductReserveException;
 import com.reserva.stock.service.ReserveService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -64,7 +63,7 @@ public class ReserveServiceImpl implements ReserveService {
     public ReserveDto reserve(ReserveDto reserveDto) throws JsonProcessingException {
         //save reserve
         ReserveEntity reserveEntity = this.saveReserve(reserveDto);
-        BigDecimal total = new BigDecimal(0) ;
+        BigDecimal total = new BigDecimal(0);
 
         for (ProductReserveDto productDto : reserveDto.getProducts()) {
             //findbyProduct
@@ -78,13 +77,28 @@ public class ReserveServiceImpl implements ReserveService {
                 this.saveProductReserveEntity(productDto, reserveEntity);
                 //subtrai quantidade disponvel
                 productRepository.decreaseStock(product.getId(), productDto.getQuantity());
-                total=  total.add(product.getValue());
+                total = total.add(product.getValue());
+            }
+        }
+        sendToPayments(total, reserveDto.getReserveId());
+        return reserveDto;
+    }
+
+    @Override
+    @Transactional
+    public void rollback(RollbackPayments rollbackPayments) {
+
+        Optional<ReserveEntity> productsReserve = reserveRepository.findById(rollbackPayments.getIdReserve());
+        if (productsReserve.isEmpty()) {
+            throw new ProductReserveException("Não existe essa reserva para realizar o rollback");
+        } else {
+            for (ProductReserveEntity productReserveEntity : productsReserve.get().getProducts()) {
+                productReserveEntity.setStatus(StatusEnum.DISPONIVEL);
+                productRepository.incrementStock(productReserveEntity.getProductId(), productReserveEntity.getAvailableQuantity());
             }
 
+          //  productReserveRepository.saveAllAndFlush(productsReserve);
         }
-
-        sendToPayments(total,reserveDto.getReserveId());
-        return reserveDto;
     }
 
     private void sendToPayments(BigDecimal total, Long saleId) throws JsonProcessingException {
@@ -101,7 +115,6 @@ public class ReserveServiceImpl implements ReserveService {
     private ReserveEntity saveReserve(ReserveDto reserveDto) {
         ReserveEntity reserveEntity = new ReserveEntity();
         reserveEntity.setDataReserva(LocalDate.parse(reserveDto.getDateReserve()));
-        reserveEntity.setVendaId(reserveDto.getReserveId());
         return reserveRepository.saveAndFlush(reserveEntity);
     }
 
@@ -111,6 +124,7 @@ public class ReserveServiceImpl implements ReserveService {
         productReserveEntity.setProductId(productDto.getId());
         productReserveEntity.setAvailableQuantity(productDto.getQuantity());
         productReserveEntity.setReserve(reserveEntity);
+        productReserveEntity.setStatus(StatusEnum.A_CONFIRMAR);
         productReserveRepository.saveAndFlush(productReserveEntity);
     }
 

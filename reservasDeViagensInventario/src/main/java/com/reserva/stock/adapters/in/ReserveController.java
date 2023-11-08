@@ -4,6 +4,7 @@ package com.reserva.stock.adapters.in;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.reserva.stock.adapters.dtos.ProductDto;
 import com.reserva.stock.adapters.dtos.ReserveDto;
+import com.reserva.stock.adapters.dtos.RollbackPayments;
 import com.reserva.stock.service.ReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,16 +39,16 @@ public class ReserveController {
         return ResponseEntity.created(uri).build();
     }
 
+
+    @PostMapping(value = "/rollback")
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity.BodyBuilder reserve(@RequestBody RollbackPayments rollbackPayments) throws JsonProcessingException {
+        reserveService.rollback(rollbackPayments);
+        return  ResponseEntity.ok();
+    }
+
     //post enviar pagamentos
     //financeiro/reserva
-
-
-
-
-
-
-
-
 
 
 }

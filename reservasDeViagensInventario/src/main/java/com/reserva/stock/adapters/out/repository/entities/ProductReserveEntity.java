@@ -1,6 +1,7 @@
 package com.reserva.stock.adapters.out.repository.entities;
 
 import com.reserva.stock.application.domain.Product;
+import com.reserva.stock.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,10 +28,14 @@ public class ProductReserveEntity {
 
     private Integer availableQuantity;
 
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
+
     @PrePersist
     private void montaPK() {
         this.id = new ProdutoReservaID(this.productId, this.reserve.getId());
     }
+
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor
@@ -42,12 +47,13 @@ public class ProductReserveEntity {
         private String productId;
 
         @Column(name = "reserva_id")
-        private String reserveId;
+        private Long reserveId;
     }
 
     public ProductReserveEntity(Product product) {
         this.productId = product.getId();
         this.availableQuantity = product.getAvailableQuantity();
+
     }
 
 

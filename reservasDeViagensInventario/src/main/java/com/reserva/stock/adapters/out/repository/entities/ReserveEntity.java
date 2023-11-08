@@ -22,10 +22,8 @@ import java.util.stream.Collectors;
 public class ReserveEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
-    private Long vendaId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private LocalDate dataReserva;
 
@@ -37,7 +35,6 @@ public class ReserveEntity {
     }
 
     public ReserveEntity(Reserve reserva) {
-        this.vendaId = reserva.getVendaId();
         this.products = reserva.getProdutos().stream().map(ProductReserveEntity::new).collect(Collectors.toList());
         this.dataReserva = LocalDate.now();
     }
